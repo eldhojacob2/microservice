@@ -1,0 +1,67 @@
+entity Course {
+	courseNo String,
+	courseName String
+}
+
+entity Batch {
+	batchNo String,
+	batchName String,
+    participantCount Integer,
+	startDate Date,
+    endDate Date,
+    status Status
+}
+
+entity Sprint {
+	sprintNo String,
+	status Status,
+    startDate Date,
+	endDate Date
+}
+
+entity Participant {
+	empId String,
+	name String,
+	email String
+}
+
+entity SubjectMatterExpert {
+	empId String,
+	name String,
+	email String,
+    contactNumber Integer
+}
+
+entity Learning {
+	status Status
+}
+relationship ManyToOne {
+	Batch{course} to Course
+    Sprint{batch} to Batch
+    Participant{sprint} to Batch   
+    SubjectMatterExpert{sprint} to Sprint 
+    Participant{learning} to Learning 
+}
+
+//relationship OneyToMany {
+   // DiversitySurveyData to DiversityQuestion    
+   /// DiversitySurveyData to DiversityQuestCategory
+    //DiversitySurveyData to DiversityAnswer
+//}
+enum Status {
+    PLANNED, INPROGRESS, COMPLETED, POSTPONED
+}
+
+enum EmployeeType {
+ 	PARTICIPANT, ADMIN, SME
+}
+
+// Set pagination options
+//paginate DiversityQuestion, DiversityAnswers with infinite-scroll
+//paginate DiversityQuestion, DiversityAnswer with pagination
+
+// Use Data Transfert Objects (DTO)
+//dto * with mapstruct
+
+// Set service options to all except few
+//service all with serviceImpl
