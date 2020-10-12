@@ -1,0 +1,39 @@
+version: '2'
+services:
+  superleague-app:
+    image: superleague
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_DATASOURCE_URL=jdbc:mysql://superleague-mysql:3306/superleague?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - JHIPSTER_CACHE_MEMCACHED_SERVERS=superleague-memcached:11211
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - SPRING_DATA_JEST_URI=http://superleague-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=http://superleague-elasticsearch:9200
+  superleague-mysql:
+    extends:
+      file: mysql.yml
+      service: superleague-mysql
+  superleague-memcached:
+    extends:
+      file: memcached.yml
+      service: superleague-memcached
+  superleague-elasticsearch:
+    extends:
+      file: elasticsearch.yml
+      service: superleague-elasticsearch
+  consul:
+    extends:
+      file: consul.yml
+      service: consul
+
+  consul-config-loader:
+    extends:
+      file: consul.yml
+      service: consul-config-loader
